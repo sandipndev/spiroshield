@@ -1,0 +1,8 @@
+.footer-text {
+  position: absolute;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  bottom: 10px;
+  text-align: center;
+}

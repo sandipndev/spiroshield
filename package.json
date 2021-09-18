@@ -1,0 +1,24 @@
+{
+  "name": "spiroshield",
+  "version": "1.0.0",
+  "description": "Securely share PDF documents with your students",
+  "main": "app/index.js",
+  "repository": "https://github.com/sandipndev/spiroshield",
+  "author": "Sandipan <sandipandey.12@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "start": "node app/index.js",
+    "build": "cd ui && yarn build"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "jszip": "^3.5.0",
+    "material-table": "^1.69.1",
+    "mysql": "^2.18.1",
+    "sharp": "^0.26.2"
+  }
+}
