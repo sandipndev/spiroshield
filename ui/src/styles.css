@@ -6,3 +6,7 @@
   bottom: 10px;
   text-align: center;
 }
+
+.react-quiz-container {
+  width: auto;
+}

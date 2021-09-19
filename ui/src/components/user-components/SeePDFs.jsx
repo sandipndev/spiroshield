@@ -19,9 +19,15 @@ import {
   Paper,
   Grid,
   Box,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,  
 } from "@material-ui/core";
 import JSZip from "jszip";
 import CloseIcon from "@material-ui/icons/Close";
+import Quiz from "react-quiz-component";
+
+import quiz from "../../data/quiz";
 
 const useStyles = makeStyles((theme) => ({
   ctabtn: {
@@ -47,6 +53,11 @@ const useStyles = makeStyles((theme) => ({
   w_100: {
     width: "100%",
   },
+  paper: {
+    width: '100%',
+    marginTop: theme.spacing.unit * 3,
+    overflowX: 'auto',
+  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -61,6 +72,9 @@ function SeePDFs(props) {
   const [loading, setLoading] = useState(false);
   const [completeArray, setCompleteArray] = useState([]);
   const [loaded, setLoaded] = useState(false);
+  const [showSummaryModal, setShowSummaryModal] = useState(false);
+  const [summary, setSummary] = useState("Sample Summary");
+  const [showQuestionnaireModal, setShowQuestionnaireModal] = useState(false);
 
   const loadPDFs = () => {
     props.Axios.post("/user/all-pdfs").then(({ data }) => {
@@ -76,6 +90,22 @@ function SeePDFs(props) {
   const closeDialog = () => {
     setShowPDFDialog(false);
     setCompleteArray([]);
+  };
+
+  const openSummaryFor = (file_id, file_name) => {
+    setCurrentPDFName(file_name);
+    if (file_name === "Lagrange Point")
+      setSummary(`If you were to go into space, and you were to go to the distance between the sun and the earth, you could find places where the gravitational pull of the sun and the gravitational pull of the earth cancel each other out. These are called Lagrange points. If you placed a satellite there, it would stay there forever.
+      Lagrange points are very useful because they allow us to put satellites in space without having to constantly nudge them back into position.
+      The Lagrange points were discovered by Joseph-Louis Lagrange in 1772.`);
+    else
+      setSummary("Since GPT-3 API is paid, currently only Lagrange's Summary is being shown.");
+    setShowSummaryModal(true);
+  };
+
+  const openMCQFor = (file_id, file_name) => {
+    setCurrentPDFName(file_name);
+    setShowQuestionnaireModal(true);
   };
 
   const openPDFfor = (file_id, file_name) => {
@@ -115,7 +145,7 @@ function SeePDFs(props) {
                   resolve({ pgNo, colNo, val: "data:image/jpg;base64," + val });
                 })
                 .catch(() => reject());
-            }),
+            })
           );
         }
 
@@ -141,33 +171,61 @@ function SeePDFs(props) {
             <Typography>No files to display</Typography>
           )}
           {allFiles.length !== 0 && (
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell>PDF Name</TableCell>
-                  <TableCell>Open PDF</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {allFiles.map((value) => (
-                  <TableRow key={value.file_id}>
-                    <TableCell>{value.file_name}</TableCell>
-                    <TableCell>
-                      <Button
-                        color="secondary"
-                        size="small"
-                        variant="outlined"
-                        onClick={() => {
-                          openPDFfor(value.file_id, value.file_name);
-                        }}
-                      >
-                        Open
-                      </Button>
-                    </TableCell>
+            <Paper className={classes.paper}>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>PDF Name</TableCell>
+                    <TableCell>Open PDF</TableCell>
+                    <TableCell>Summary</TableCell>
+                    <TableCell>Questionnaire</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHead>
+                <TableBody>
+                  {allFiles.map((value) => (
+                    <TableRow key={value.file_id}>
+                      <TableCell>{value.file_name}</TableCell>
+                      <TableCell>
+                        <Button
+                          color="secondary"
+                          size="small"
+                          variant="outlined"
+                          onClick={() => {
+                            openPDFfor(value.file_id, value.file_name);
+                          }}
+                        >
+                          Open
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          color="secondary"
+                          size="small"
+                          variant="outlined"
+                          onClick={() => {
+                            openSummaryFor(value.file_id, value.file_name);
+                          }}
+                        >
+                          Summary
+                        </Button>
+                      </TableCell>
+                      <TableCell>
+                        <Button
+                          color="secondary"
+                          size="small"
+                          variant="outlined"
+                          onClick={() => {
+                            openMCQFor(value.file_id, value.file_name);
+                          }}
+                        >
+                          MCQ
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
           )}
           <Button
             className={classes.ctabtn}
@@ -218,6 +276,31 @@ function SeePDFs(props) {
             </Grid>
           </Box>
         )}
+      </Dialog>
+      <Dialog open={showSummaryModal} onClose={() => setShowSummaryModal(false)}>
+        <DialogTitle>
+          {currentPDFName} - Summary
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {summary}
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+      <Dialog
+        open={showQuestionnaireModal}
+        onClose={() => setShowQuestionnaireModal(false)}
+      >
+        <DialogTitle>
+          {currentPDFName} - Questionnaire
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {currentPDFName === "Biology" ? 
+              <Quiz quiz={quiz} shuffle={true} showInstantFeedback={true} /> : 
+              <>Since GPT-3 API is paid, currently, only Biology PDFs have MCQs autogenerated.</>}
+          </DialogContentText>
+        </DialogContent>
       </Dialog>
     </>
   );
