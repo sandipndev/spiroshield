@@ -14,8 +14,10 @@ import {
 } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Back from "@material-ui/icons/ArrowBack";
 import MuiAlert from "@material-ui/lab/Alert";
 import Axios from "axios";
+import { useHistory } from "react-router";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -34,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Signup(props) {
   const classes = useStyles();
+  const history = useHistory();
 
   const [createUserData, setCreateUserData] = useState({
     name: "",
@@ -127,6 +130,9 @@ function Signup(props) {
     <>
       <AppBar>
         <Toolbar>
+          <IconButton edge="start" color="inherit" onClick={history.goBack}>
+            <Back />
+          </IconButton>
           <Typography variant="h6">Create Account</Typography>
           <div className={classes.toolbarButtons}>
             <IconButton edge="end" onClick={themeChange} color="inherit">

@@ -81,7 +81,7 @@ function User(props) {
       <AppBar>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            Hey!
+            Welcome!
           </Typography>
           <div className={classes.toolbarButtons}>
             <IconButton edge="end" onClick={themeChange} color="inherit">

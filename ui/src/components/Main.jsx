@@ -68,7 +68,7 @@ function Main(props) {
             <img className={classes.logoImg} src="/logo.png" alt="Logo" />
 
             <Typography className={classes.updownspace}>
-              Hello, welcome to PDF. This is a location where you can get PDFs
+              Hello, welcome to Spiroshield! This is a location where you can get PDFs
               shared by an administrator. Please Login/Signup to continue.
             </Typography>
 

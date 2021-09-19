@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Back from "@material-ui/icons/ArrowBack";
 import Axios from "axios";
 import { useHistory } from "react-router-dom";
 
@@ -102,6 +103,9 @@ function Login(props) {
     <>
       <AppBar>
         <Toolbar>
+          <IconButton edge="start" color="inherit" onClick={history.goBack}>
+            <Back />
+          </IconButton>
           <Typography variant="h6">User Login</Typography>
           <div className={classes.toolbarButtons}>
             <IconButton edge="end" onClick={themeChange} color="inherit">
